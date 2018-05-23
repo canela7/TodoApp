@@ -11,7 +11,7 @@ import UIKit
 class TodoListViewController: UITableViewController
 {
 
-    var itemArray = ["Find Mike", "Buy eggos", "Destroy Demogorgon"]
+    var itemArray = [Item]()
     
     //UserDefaults - An interface to the user’s defaults database, where you store key-value pairs persistently across launches of your app.
     ///standard is a property inside UserDefaults - Returns the shared defaults object.
@@ -20,11 +20,31 @@ class TodoListViewController: UITableViewController
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //Returns the array associated with the specified key.
-        if let items = defaults.array(forKey: "TodoListArray") as? [String]
-        {
-            itemArray = items
+        
+        
+        let newItem = Item()
+        newItem.title = "Find Mike"
+        newItem.done = true
+        itemArray.append(newItem)
+        
+        let newItem2 = Item()
+        newItem2.title = "Buy Eggos"
+        itemArray.append(newItem2)
+        
+        let newItem3 = Item()
+        newItem3.title = "Monsters"
+        itemArray.append(newItem3)
+        
+        
+        if let items = defaults.array(forKey: "TodoListArray") as? [Item] {
+            itemArray = items;
         }
+        
+//        //Returns the array associated with the specified key.
+//        if let items = defaults.array(forKey: "TodoListArray") as? [String]
+//        {
+//            itemArray = items
+//        }
       
     }
 
@@ -39,7 +59,18 @@ class TodoListViewController: UITableViewController
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
         
-        cell.textLabel?.text = itemArray[indexPath.row]
+        let item = itemArray[indexPath.row]
+        
+        cell.textLabel?.text = item.title
+        
+        //check if true, if so then set it to checkmark else none.
+        cell.accessoryType = item.done ? .checkmark : .none
+        
+//        if item.done == true {
+//            cell.accessoryType = .checkmark
+//        }else{
+//            cell.accessoryType = .none
+//        }
         
         return cell;
     }
@@ -50,12 +81,10 @@ class TodoListViewController: UITableViewController
         
         //tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark;
         
-        if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark {
-            tableView.cellForRow(at: indexPath)?.accessoryType = .none;
-        }else {
-            tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark;
-        }
+        itemArray[indexPath.row].done = !itemArray[indexPath.row].done
         
+        //force to call tableview methods to call again to update data like checkmarks
+        tableView.reloadData()
         
         tableView.deselectRow(at: indexPath, animated: true)
         
@@ -80,12 +109,13 @@ class TodoListViewController: UITableViewController
         }
         
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
-            print(textField.text!)
-            
-            self.itemArray.append(textField.text!)
+           
+            let newItem = Item();
+            newItem.title = textField.text!
+            self.itemArray.append(newItem)
             
             //Sets the value of the specified default key.
-            self.defaults.setValue(self.itemArray, forKey: "TodoListArray")
+            self.defaults.set(self.itemArray, forKey: "TodoListArray")
             
             //reload data for the new item added to show up inside tableview
             self.tableView.reloadData();
