@@ -13,6 +13,8 @@ class TodoListViewController: UITableViewController
 
     var itemArray = [Item]()
     
+     let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
+    
     //UserDefaults - An interface to the user’s defaults database, where you store key-value pairs persistently across launches of your app.
     ///standard is a property inside UserDefaults - Returns the shared defaults object.
     let defaults = UserDefaults.standard;
@@ -20,7 +22,7 @@ class TodoListViewController: UITableViewController
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        print(dataFilePath!)
         
         let newItem = Item()
         newItem.title = "Find Mike"
@@ -83,8 +85,7 @@ class TodoListViewController: UITableViewController
         
         itemArray[indexPath.row].done = !itemArray[indexPath.row].done
         
-        //force to call tableview methods to call again to update data like checkmarks
-        tableView.reloadData()
+        saveItems()
         
         tableView.deselectRow(at: indexPath, animated: true)
         
@@ -114,18 +115,29 @@ class TodoListViewController: UITableViewController
             newItem.title = textField.text!
             self.itemArray.append(newItem)
             
-            //Sets the value of the specified default key.
-            self.defaults.set(self.itemArray, forKey: "TodoListArray")
-            
-            //reload data for the new item added to show up inside tableview
-            self.tableView.reloadData();
-            
+          
+            self.saveItems()
             
         }
         
         alert.addAction(action)
         
         present(alert, animated: true, completion: nil)
+    }
+    
+    
+    func saveItems(){
+        //econde the itemArray, save.
+        let encoder = PropertyListEncoder()
+        do{
+            let data = try encoder.encode(self.itemArray)
+            
+            try data.write(to: self.dataFilePath!)
+        }catch{
+            print("Error trying to save, the error \(error)")
+        }
+        //reload data for the new item added to show up inside tableview
+        self.tableView.reloadData();
     }
     
 

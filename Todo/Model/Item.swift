@@ -8,7 +8,8 @@
 
 import Foundation
 
-class Item {
+//encodable for this customize class can save items 
+class Item: Encodable {
     
     var title : String = "";
     var done : Bool = false;
