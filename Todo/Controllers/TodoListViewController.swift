@@ -23,30 +23,8 @@ class TodoListViewController: UITableViewController
         super.viewDidLoad()
         
         print(dataFilePath!)
-        
-        let newItem = Item()
-        newItem.title = "Find Mike"
-        newItem.done = true
-        itemArray.append(newItem)
-        
-        let newItem2 = Item()
-        newItem2.title = "Buy Eggos"
-        itemArray.append(newItem2)
-        
-        let newItem3 = Item()
-        newItem3.title = "Monsters"
-        itemArray.append(newItem3)
-        
-        
-        if let items = defaults.array(forKey: "TodoListArray") as? [Item] {
-            itemArray = items;
-        }
-        
-//        //Returns the array associated with the specified key.
-//        if let items = defaults.array(forKey: "TodoListArray") as? [String]
-//        {
-//            itemArray = items
-//        }
+                
+        loadItems()
       
     }
 
@@ -68,12 +46,7 @@ class TodoListViewController: UITableViewController
         //check if true, if so then set it to checkmark else none.
         cell.accessoryType = item.done ? .checkmark : .none
         
-//        if item.done == true {
-//            cell.accessoryType = .checkmark
-//        }else{
-//            cell.accessoryType = .none
-//        }
-        
+
         return cell;
     }
     
@@ -138,6 +111,20 @@ class TodoListViewController: UITableViewController
         }
         //reload data for the new item added to show up inside tableview
         self.tableView.reloadData();
+    }
+    
+    func loadItems(){
+        if let data = try? Data(contentsOf: dataFilePath!) {
+            let decoder = PropertyListDecoder()
+            
+            do{
+                 itemArray = try decoder.decode([Item].self, from: data)
+            }catch{
+                print("Error \(error)")
+            }
+        }
+        
+        
     }
     
 
