@@ -26,9 +26,9 @@ class TodoListViewController: UITableViewController
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print(dataFilePath!)
+       print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
                 
-      //  loadItems()
+        loadItems()
       
     }
 
@@ -90,7 +90,6 @@ class TodoListViewController: UITableViewController
            
             //Item is the Entry datamodel core data.
             let newItem = Item(context: self.context)
-            
             newItem.title = textField.text!
             newItem.done = false
             self.itemArray.append(newItem)
@@ -119,20 +118,18 @@ class TodoListViewController: UITableViewController
     }
     
     
-//
-//    func loadItems(){
-//        if let data = try? Data(contentsOf: dataFilePath!) {
-//            let decoder = PropertyListDecoder()
-//
-//            do{
-//                 itemArray = try decoder.decode([Item].self, from: data)
-//            }catch{
-//                print("Error \(error)")
-//            }
-//        }
-//
-//
-//    }
+
+    func loadItems(){
+        let request : NSFetchRequest<Item> = Item.fetchRequest()
+        
+        do{
+          itemArray = try context.fetch(request)
+        }catch {
+            print("Error fetching data from context \(error)")
+        }
+        
+        
+    }
     
 
 
