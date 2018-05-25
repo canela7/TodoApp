@@ -58,7 +58,10 @@ class TodoListViewController: UITableViewController
     //MARK - Tableview Delegate Methods
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        //tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark;
+        //to reomve item using core data
+//        context.delete(itemArray[indexPath.row])
+//        itemArray.remove(at: indexPath.row)
+        
         
         itemArray[indexPath.row].done = !itemArray[indexPath.row].done
         
@@ -118,9 +121,10 @@ class TodoListViewController: UITableViewController
     }
     
     
-
-    func loadItems(){
-        let request : NSFetchRequest<Item> = Item.fetchRequest()
+    //built in paramter Item.fetchRequest(), if there is no input inside the function when called i.e in viewdidload method
+    func loadItems(with request : NSFetchRequest<Item> = Item.fetchRequest()){
+        
+    //    let request : NSFetchRequest<Item> = Item.fetchRequest()
         
         do{
           itemArray = try context.fetch(request)
@@ -129,10 +133,74 @@ class TodoListViewController: UITableViewController
         }
         
         
+        tableView.reloadData()
     }
     
-
-
-
+ 
 }
+
+//MARK: - Search Bar Methods
+
+extension TodoListViewController: UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        let request : NSFetchRequest<Item> = Item.fetchRequest()
+        
+        print(searchBar.text!)
+        
+        //NSPREDICATE USED TO QUERY/FILTER ITEMS
+        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        
+        request.predicate = predicate
+        
+        let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
+        
+        request.sortDescriptors = [sortDescriptor]
+        
+        loadItems(with: request)
+        
+//        do{
+//            itemArray = try context.fetch(request)
+//        }catch{
+//            print("Error fetching data from context \(error)")
+//        }
+//
+//        tableView.reloadData()
+        
+    }
+    
+    
+    
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text?.count == 0 {
+            loadItems() //get all the items back if the search bar is empty
+            
+            //ask the dispatch to run code inside the main thread, and run that
+            DispatchQueue.main.async {
+                //keyboard and cursor disappers after we dont have any text inside the search bar
+                searchBar.resignFirstResponder()
+            }
+            
+            
+        }
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
