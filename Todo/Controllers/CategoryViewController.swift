@@ -7,11 +7,11 @@
 //
 
 import UIKit
-//import CoreData
 import RealmSwift
 
 
-class CategoryViewController: UITableViewController {
+
+class CategoryViewController: SwipeTableViewController  {
     
     let realm = try! Realm()
 
@@ -21,6 +21,8 @@ class CategoryViewController: UITableViewController {
         super.viewDidLoad()
         
          loadCategories()
+        
+      
     }
 
     
@@ -33,15 +35,37 @@ class CategoryViewController: UITableViewController {
         
     }
     
+//    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! SwipeTableViewCell
+//        cell.delegate = self
+//        return cell
+//    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
+        
+        //this is going to tap inside the cell that gets created inside our super class cell
+       let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
         cell.textLabel?.text = categoryArray?[indexPath.row].name ?? "No categories added yet"
         
         return cell;
     }
     
+    //MARK: - DELETE DATA FROM SWIPE
     
+    override func updateModel(at indexPath: IndexPath) {
+        
+                    if let categoryForDeletion = self.categoryArray?[indexPath.row] {
+                        do{
+                            try self.realm.write {
+                                self.realm.delete(categoryForDeletion)
+                            }
+                        }catch{
+                            print("Error deleting category \(error)")
+                        }
+                    }
+        
+    }
     
     //MARK: - Data Manipulation  Methods
     func save(category: Category){
@@ -115,10 +139,7 @@ class CategoryViewController: UITableViewController {
         
         present(alert, animated: true, completion: nil)
     }
-    
-
-  
- 
-    
-    
 }
+
+
+

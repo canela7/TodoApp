@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		C912EF93984D3ABD6BC30B24 /* Pods_Todo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A1C9585235265BF456F22D7 /* Pods_Todo.framework */; };
 		DAA06EBE20B8E07C004A8412 /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA06EBD20B8E07C004A8412 /* CategoryViewController.swift */; };
+		DAB9046120BB3918006487FF /* SwipeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB9046020BB3918006487FF /* SwipeTableViewController.swift */; };
 		DAC161A420B4C4CD0079EA2F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAC161A320B4C4CD0079EA2F /* AppDelegate.swift */; };
 		DAC161A620B4C4CD0079EA2F /* TodoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAC161A520B4C4CD0079EA2F /* TodoListViewController.swift */; };
 		DAC161A920B4C4CD0079EA2F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DAC161A720B4C4CD0079EA2F /* Main.storyboard */; };
@@ -23,6 +24,7 @@
 		7A604F0D08CA17DB8FBE941E /* Pods-Todo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Todo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Todo/Pods-Todo.debug.xcconfig"; sourceTree = "<group>"; };
 		A35552F64554A55C4AB2EF1D /* Pods-Todo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Todo.release.xcconfig"; path = "Pods/Target Support Files/Pods-Todo/Pods-Todo.release.xcconfig"; sourceTree = "<group>"; };
 		DAA06EBD20B8E07C004A8412 /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewController.swift; sourceTree = "<group>"; };
+		DAB9046020BB3918006487FF /* SwipeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeTableViewController.swift; sourceTree = "<group>"; };
 		DAC161A020B4C4CD0079EA2F /* Todo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Todo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAC161A320B4C4CD0079EA2F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DAC161A520B4C4CD0079EA2F /* TodoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoListViewController.swift; sourceTree = "<group>"; };
@@ -77,6 +79,7 @@
 			children = (
 				DAA06EBD20B8E07C004A8412 /* CategoryViewController.swift */,
 				DAC161A520B4C4CD0079EA2F /* TodoListViewController.swift */,
+				DAB9046020BB3918006487FF /* SwipeTableViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -114,11 +117,19 @@
 				DABA915C20B5ECFA0069D363 /* Controllers */,
 				DABA915B20B5ECF40069D363 /* Model */,
 				DABA915D20B5ED060069D363 /* View */,
-				DAC161AA20B4C4CD0079EA2F /* Assets.xcassets */,
-				DAC161AC20B4C4CD0079EA2F /* LaunchScreen.storyboard */,
+				DAC96E1F20BA8D540019A659 /* Supporting Files */,
 				DAC161AF20B4C4CD0079EA2F /* Info.plist */,
 			);
 			path = Todo;
+			sourceTree = "<group>";
+		};
+		DAC96E1F20BA8D540019A659 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				DAC161AC20B4C4CD0079EA2F /* LaunchScreen.storyboard */,
+				DAC161AA20B4C4CD0079EA2F /* Assets.xcassets */,
+			);
+			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -219,11 +230,13 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-Todo/Pods-Todo-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/SwipeCellKit/SwipeCellKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwipeCellKit.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -256,6 +269,7 @@
 				DAA06EBE20B8E07C004A8412 /* CategoryViewController.swift in Sources */,
 				DAC161A620B4C4CD0079EA2F /* TodoListViewController.swift in Sources */,
 				DAC161A420B4C4CD0079EA2F /* AppDelegate.swift in Sources */,
+				DAB9046120BB3918006487FF /* SwipeTableViewController.swift in Sources */,
 				DAC96E1C20BA06350019A659 /* Category.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
