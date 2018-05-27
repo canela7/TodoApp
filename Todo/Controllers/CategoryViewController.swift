@@ -8,7 +8,7 @@
 
 import UIKit
 import RealmSwift
-
+import ChameleonFramework
 
 
 class CategoryViewController: SwipeTableViewController  {
@@ -21,6 +21,8 @@ class CategoryViewController: SwipeTableViewController  {
         super.viewDidLoad()
         
          loadCategories()
+        
+        tableView.separatorStyle = .none
         
       
     }
@@ -35,19 +37,24 @@ class CategoryViewController: SwipeTableViewController  {
         
     }
     
-//    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! SwipeTableViewCell
-//        cell.delegate = self
-//        return cell
-//    }
+
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         //this is going to tap inside the cell that gets created inside our super class cell
        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
-        cell.textLabel?.text = categoryArray?[indexPath.row].name ?? "No categories added yet"
-        
+        if let category = categoryArray?[indexPath.row] {
+            cell.textLabel?.text = category.name
+            
+            //"FF5855" is the default color thats if categoryArray does not have a color
+            cell.backgroundColor = UIColor(hexString: category.color)
+            
+        }else {
+            cell.textLabel?.text = "No Categories added yet"
+            cell.backgroundColor = UIColor(hexString: "FF5855")
+        }
+  
         return cell;
     }
     
@@ -55,15 +62,15 @@ class CategoryViewController: SwipeTableViewController  {
     
     override func updateModel(at indexPath: IndexPath) {
         
-                    if let categoryForDeletion = self.categoryArray?[indexPath.row] {
-                        do{
-                            try self.realm.write {
-                                self.realm.delete(categoryForDeletion)
-                            }
-                        }catch{
-                            print("Error deleting category \(error)")
-                        }
-                    }
+        if let categoryForDeletion = self.categoryArray?[indexPath.row] {
+            do{
+                try self.realm.write {
+                    self.realm.delete(categoryForDeletion)
+                }
+            }catch{
+                print("Error deleting category \(error)")
+            }
+        }
         
     }
     
@@ -87,6 +94,7 @@ class CategoryViewController: SwipeTableViewController  {
     func loadCategories(){
         
         //here realm.object auto update, fetching data from realm
+        
         categoryArray = realm.objects(Category.self)
         
         tableView.reloadData()
@@ -130,6 +138,7 @@ class CategoryViewController: SwipeTableViewController  {
             //Category is the Entry datamodel core data.
             let newCategory = Category()
             newCategory.name = textField.text!
+            newCategory.color = UIColor.randomFlat.hexValue()
             
             self.save(category: newCategory)
             
