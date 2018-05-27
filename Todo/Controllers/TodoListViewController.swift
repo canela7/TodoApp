@@ -22,18 +22,14 @@ class TodoListViewController: UITableViewController
         }
         
     }
+
     
-//     let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
-    
-    
-    //UserDefaults - An interface to the user’s defaults database, where you store key-value pairs persistently across launches of your app.
-    ///standard is a property inside UserDefaults - Returns the shared defaults object.
-    let defaults = UserDefaults.standard;
+  
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-       print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
+       
                 
        // loadItems()
       
@@ -79,17 +75,6 @@ class TodoListViewController: UITableViewController
         
         tableView.reloadData()
         
-        
-        //to reomve item using core data
-//        context.delete(itemArray[indexPath.row])
-//        itemArray.remove(at: indexPath.row)
-        
-        
-        
-//        todoItems[indexPath.row].done = !todoItems[indexPath.row].done
-//
-//        saveItems()
-        
         tableView.deselectRow(at: indexPath, animated: true)
         
         
@@ -109,7 +94,6 @@ class TodoListViewController: UITableViewController
         alert.addTextField { (alertTextField) in
             alertTextField.placeholder = "Create new item"
             textField = alertTextField
-            print("Now")
         }
         
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
@@ -120,6 +104,7 @@ class TodoListViewController: UITableViewController
                         //Item is the Entry datamodel core data.
                         let newItem = Item()
                         newItem.title = textField.text!
+                        newItem.dateCreated = Date()
                         currentCategory.items.append(newItem)
                     }
                 }catch{
@@ -154,55 +139,28 @@ class TodoListViewController: UITableViewController
 
 //MARK: - Search Bar Methods
 
-//extension TodoListViewController: UISearchBarDelegate {
-//
-//    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-//        let request : NSFetchRequest<Item> = Item.fetchRequest()
-//
-//        print(searchBar.text!)
-//
-//        //NSPREDICATE USED TO QUERY/FILTER ITEMS
-//        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
-//
-//       // request.predicate = predicate
-//
-//        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-//
-//        //let sortDescriptor = NSSortDescriptor(key: "title", ascending: true)
-//
-//
-//        //request.sortDescriptors = [sortDescriptor]
-//
-//        loadItems(with: request, predicate: predicate)
-//
-////        do{
-////            itemArray = try context.fetch(request)
-////        }catch{
-////            print("Error fetching data from context \(error)")
-////        }
-////
-////        tableView.reloadData()
-//
-//    }
-//
-//
-//
-//
-//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-//        if searchBar.text?.count == 0 {
-//            loadItems() //get all the items back if the search bar is empty
-//
-//            //ask the dispatch to run code inside the main thread, and run that
-//            DispatchQueue.main.async {
-//                //keyboard and cursor disappers after we dont have any text inside the search bar
-//                searchBar.resignFirstResponder()
-//            }
-//
-//
-//        }
-//    }
-//
-//}
+extension TodoListViewController: UISearchBarDelegate {
+
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        todoItems = todoItems?.filter("title CONTAINS[cd] %@", searchBar.text!).sorted(byKeyPath: "dateCreated", ascending: true)
+        
+        tableView.reloadData()
+    }
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text?.count == 0 {
+            loadItems() //get all the items back if the search bar is empty
+            
+            //ask the dispatch to run code inside the main thread, and run that
+            DispatchQueue.main.async {
+                //keyboard and cursor disappers after we dont have any text inside the search bar
+                searchBar.resignFirstResponder()
+            }
+        }
+    }
+
+}
 
 
 
